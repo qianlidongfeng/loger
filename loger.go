@@ -13,7 +13,11 @@ func init(){
 	log.SetFlags(log.Llongfile|log.Ltime|log.Ldate)
 }
 
-func Warn(v ...interface{}){
+type Loger struct{
+
+}
+
+func (this *Loger)Warn(v ...interface{}){
 	var buf [1024]byte
 	n:=runtime.Stack(buf[:],false)
 	stack := string(buf[:n-1])
@@ -24,7 +28,7 @@ func Warn(v ...interface{}){
 	mu.Unlock()
 }
 
-func Fatal(v ...interface{}){
+func (this *Loger)Fatal(v ...interface{}){
 	var buf [1024]byte
 	n:=runtime.Stack(buf[:],true)
 	stack := string(buf[:n-1])
@@ -36,7 +40,7 @@ func Fatal(v ...interface{}){
 	os.Exit(1)
 }
 
-func Panic(v ...interface{}){
+func (this *Loger)Panic(v ...interface{}){
 	s:=fmt.Sprint(v...)
 	mu.Lock()
 	log.SetPrefix("[panic]")
@@ -45,7 +49,7 @@ func Panic(v ...interface{}){
 	mu.Unlock()
 }
 
-func Print(v ...interface{}){
+func (this *Loger)Print(v ...interface{}){
 	s:=fmt.Sprint(v...)
 	mu.Lock()
 	log.SetPrefix("[log]")
@@ -53,10 +57,18 @@ func Print(v ...interface{}){
 	mu.Unlock()
 }
 
-func Debug(v ...interface{}){
+func (this *Loger)Debug(v ...interface{}){
 	s:=fmt.Sprint(v...)
 	mu.Lock()
 	log.SetPrefix("[debug]")
+	log.Output(2,s)
+	mu.Unlock()
+}
+
+func (this *Loger)Msg(label string,msg ...interface{}){
+	s:=fmt.Sprint(msg...)
+	mu.Lock()
+	log.SetPrefix(label)
 	log.Output(2,s)
 	mu.Unlock()
 }
