@@ -20,7 +20,7 @@ func Warn(v ...interface{}){
 	mu.Lock()
 	log.SetPrefix("[warning]")
 	s:=fmt.Sprint(v...)
-	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack))
+	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack,"\n--------\n"))
 	mu.Unlock()
 }
 
@@ -31,7 +31,7 @@ func Fatal(v ...interface{}){
 	mu.Lock()
 	log.SetPrefix("[fatal]")
 	s:=fmt.Sprint(v...)
-	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack))
+	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack,"\n--------\n"))
 	mu.Unlock()
 	os.Exit(1)
 }
@@ -48,7 +48,7 @@ func Panic(v ...interface{}){
 func Print(v ...interface{}){
 	s:=fmt.Sprint(v...)
 	mu.Lock()
-	log.SetPrefix("")
+	log.SetPrefix("[log]")
 	log.Output(2,s)
 	mu.Unlock()
 }
