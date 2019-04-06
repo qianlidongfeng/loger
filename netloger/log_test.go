@@ -15,7 +15,7 @@ func TestSqloger_Fatal(t *testing.T) {
 		Table:    "test",
 		Type:     "mysql",
 	}
-	err := loger.Init(cfg)
+	err := loger.(*netloger.Sqloger).Init(cfg)
 	if err != nil {
 		t.Error(err)
 	}
@@ -35,12 +35,12 @@ func TestSqloger_Warn(t *testing.T) {
 		Table:    "test",
 		Type:     "mysql",
 	}
-	err := loger.Init(cfg)
+	err := loger.(*netloger.Sqloger).Init(cfg)
 	if err != nil {
 		t.Error(err)
 	}
 	loger.Warn("xixihaha")
-	loger.Release()
+	loger.(*netloger.Sqloger).Release()
 }
 
 func TestSqloger_Msg(t *testing.T) {
@@ -53,10 +53,10 @@ func TestSqloger_Msg(t *testing.T) {
 		Table:    "test",
 		Type:     "mysql",
 	}
-	err := loger.Init(cfg)
+	err := loger.(*netloger.Sqloger).Init(cfg)
 	if err != nil {
 		t.Error(err)
 	}
 	loger.Msg("xixihaha","info")
-	loger.Release()
+	loger.(*netloger.Sqloger).Release()
 }

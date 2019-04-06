@@ -10,11 +10,23 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"github.com/qianlidongfeng/loger"
 )
 
 var TABLE_FIELDS = [9]string{"time","hostname","process","pid","label","log","file","line","stack"}
 
-func NewSqloger() *Sqloger{
+type SqlConfig struct{
+	User string
+	PassWord string
+	Address string
+	Type string
+	DB string
+	Table string
+	MaxOpenConns int
+	MaxIdleConns int
+}
+
+func NewSqloger() loger.Loger{
 	return &Sqloger{
 		tbChecker:NewSqlTbChecker(),
 		tbFixer:NewSqlTbFixer(),
@@ -43,8 +55,8 @@ func (this *Sqloger) Init(cfg SqlConfig) error{
 	if err != nil{
 		return err
 	}
-	this.db.SetMaxOpenConns(2000)
-	this.db.SetMaxIdleConns(1000)
+	this.db.SetMaxOpenConns(cfg.MaxOpenConns)
+	this.db.SetMaxIdleConns(cfg.MaxIdleConns)
 	//checktable
 	err=this.tbChecker.CheckTable(this.db,cfg.Table)
 	if err != nil{
@@ -173,12 +185,4 @@ func (this *Sqloger) Msg(label string,msg ...interface{}){
 	}
 }
 
-type SqlConfig struct{
-	User string
-	PassWord string
-	Address string
-	Type string
-	DB string
-	Table string
-}
 

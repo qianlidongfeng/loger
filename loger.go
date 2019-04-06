@@ -1,74 +1,7 @@
 package loger
 
-import (
-	"fmt"
-	"log"
-	"os"
-	"runtime"
-	"sync"
-)
-
-var mu sync.Mutex
-func init(){
-	log.SetFlags(log.Llongfile|log.Ltime|log.Ldate)
-}
-
-type Loger struct{
-
-}
-
-func (this *Loger)Warn(v ...interface{}){
-	var buf [1024]byte
-	n:=runtime.Stack(buf[:],false)
-	stack := string(buf[:n-1])
-	mu.Lock()
-	log.SetPrefix("[warning]")
-	s:=fmt.Sprint(v...)
-	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack,"\n--------\n"))
-	mu.Unlock()
-}
-
-func (this *Loger)Fatal(v ...interface{}){
-	var buf [1024]byte
-	n:=runtime.Stack(buf[:],true)
-	stack := string(buf[:n-1])
-	mu.Lock()
-	log.SetPrefix("[fatal]")
-	s:=fmt.Sprint(v...)
-	log.Output(2,fmt.Sprint(s,"\n[stack]:\n",stack,"\n--------\n"))
-	mu.Unlock()
-	os.Exit(1)
-}
-
-func (this *Loger)Panic(v ...interface{}){
-	s:=fmt.Sprint(v...)
-	mu.Lock()
-	log.SetPrefix("[panic]")
-	log.Output(2,s)
-	panic(s)
-	mu.Unlock()
-}
-
-func (this *Loger)Print(v ...interface{}){
-	s:=fmt.Sprint(v...)
-	mu.Lock()
-	log.SetPrefix("[log]")
-	log.Output(2,s)
-	mu.Unlock()
-}
-
-func (this *Loger)Debug(v ...interface{}){
-	s:=fmt.Sprint(v...)
-	mu.Lock()
-	log.SetPrefix("[debug]")
-	log.Output(2,s)
-	mu.Unlock()
-}
-
-func (this *Loger)Msg(label string,msg ...interface{}){
-	s:=fmt.Sprint(msg...)
-	mu.Lock()
-	log.SetPrefix(label)
-	log.Output(2,s)
-	mu.Unlock()
+type Loger interface{
+	Warn(e ...interface{})
+	Fatal(e ...interface{})
+	Msg(label string,msg ...interface{})
 }
