@@ -65,16 +65,20 @@ func (this *LocalLoger)Print(v ...interface{}){
 func (this *LocalLoger)Debug(v ...interface{}){
 	s:=fmt.Sprint(v...)
 	mu.Lock()
+	log.SetFlags(0)
 	log.SetPrefix("[debug]")
 	log.Output(2,s)
+	log.SetFlags(log.Llongfile|log.Ltime|log.Ldate)
 	mu.Unlock()
 }
 
 func (this *LocalLoger)Msg(label string,msg ...interface{}){
 	s:=fmt.Sprint(msg...)
 	mu.Lock()
+	log.SetFlags(0)
 	log.SetPrefix(label)
 	log.Output(2,s)
+	log.SetFlags(log.Llongfile|log.Ltime|log.Ldate)
 	mu.Unlock()
 
 }
@@ -83,4 +87,8 @@ func (this *LocalLoger)SetOutPut(w io.Writer){
 	mu.Lock()
 	log.SetOutput(w)
 	mu.Unlock()
+}
+
+func (this *LocalLoger)Close(){
+	log.SetPrefix("")
 }

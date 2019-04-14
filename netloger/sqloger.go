@@ -98,7 +98,7 @@ func (this *Sqloger) Init(cfg SqlConfig) error{
 }
 
 
-func (this *Sqloger) Release(){
+func (this *Sqloger) Close(){
 	this.stmt.Close()
 	this.db.Close()
 }
@@ -164,7 +164,7 @@ func (this *Sqloger) Fatal(e ...interface{}){
 		log.Println("line:",line)
 		this.mu.Unlock()
 	}
-	this.Release()
+	this.Close()
 	os.Exit(1)
 }
 
