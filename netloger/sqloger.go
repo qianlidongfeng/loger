@@ -10,7 +10,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/qianlidongfeng/loger"
 )
 
 var TABLE_FIELDS = [9]string{"time","hostname","process","pid","label","log","file","line","stack"}
@@ -19,14 +18,13 @@ type SqlConfig struct{
 	User string
 	PassWord string
 	Address string
-	Type string
-	DB string
+	Database string
 	Table string
 	MaxOpenConns int
 	MaxIdleConns int
 }
 
-func NewSqloger() loger.Loger{
+func NewSqloger() *Sqloger{
 	return &Sqloger{
 		tbChecker:NewSqlTbChecker(),
 		tbFixer:NewSqlTbFixer(),
@@ -47,7 +45,7 @@ type Sqloger struct {
 
 func (this *Sqloger) Init(cfg SqlConfig) error{
 	var err error
-	this.db,err = sql.Open(cfg.Type,cfg.User+":"+cfg.PassWord+"@tcp("+cfg.Address+")/"+cfg.DB)
+	this.db,err = sql.Open("mysql",cfg.User+":"+cfg.PassWord+"@tcp("+cfg.Address+")/"+cfg.Database)
 	if err != nil{
 		return err
 	}
