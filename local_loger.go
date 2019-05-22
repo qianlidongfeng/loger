@@ -76,7 +76,7 @@ func (this *LocalLoger)Msg(label string,msg ...interface{}){
 	s:=fmt.Sprint(msg...)
 	mu.Lock()
 	log.SetFlags(0)
-	log.SetPrefix(label)
+	log.SetPrefix("["+label+"]")
 	log.Output(2,s)
 	log.SetFlags(log.Llongfile|log.Ltime|log.Ldate)
 	mu.Unlock()

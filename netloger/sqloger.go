@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/qianlidongfeng/toolbox"
 	"log"
 	"os"
 	"runtime"
@@ -14,15 +15,6 @@ import (
 
 var TABLE_FIELDS = [9]string{"time","hostname","process","pid","label","log","file","line","stack"}
 
-type SqlConfig struct{
-	User string
-	PassWord string
-	Address string
-	Database string
-	Table string
-	MaxOpenConns int
-	MaxIdleConns int
-}
 
 func NewSqloger() *Sqloger{
 	return &Sqloger{
@@ -43,9 +35,9 @@ type Sqloger struct {
 }
 
 
-func (this *Sqloger) Init(cfg SqlConfig) error{
+func (this *Sqloger) Init(cfg toolbox.MySqlConfig) error{
 	var err error
-	this.db,err = sql.Open("mysql",cfg.User+":"+cfg.PassWord+"@tcp("+cfg.Address+")/"+cfg.Database)
+	this.db,err = sql.Open("mysql",cfg.User+":"+cfg.PassWord+"@tcp("+cfg.Address+")/"+cfg.DataBase)
 	if err != nil{
 		return err
 	}
