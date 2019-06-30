@@ -108,7 +108,7 @@ func (this *Sqloger) Warn(e ...interface{}){
 	var buf [1024]byte
 	n:=runtime.Stack(buf[:],false)
 	stack := string(buf[:n-1])
-	_,err:=this.stmt.Exec(time.Now().Format("2006-01-02 15:04:05"),this.hostname,this.process,os.Getpid(),"warnning",fmt.Sprint(e...),file,line,stack)
+	_,err:=this.stmt.Exec(toolbox.GetTimeSecond(),this.hostname,this.process,os.Getpid(),"warnning",fmt.Sprint(e...),file,line,stack)
 	if err != nil{
 		this.mu.Lock()
 		log.Println("------------------")
@@ -135,7 +135,7 @@ func (this *Sqloger) Fatal(e ...interface{}){
 	n:=runtime.Stack(buf[:],true)
 	stack := string(buf[:n-1])
 
-	_,err:=this.stmt.Exec(time.Now().Format("2006-01-02 15:04:05"),this.hostname,this.process,os.Getpid(),"fatal",fmt.Sprint(e...),file,line,stack)
+	_,err:=this.stmt.Exec(toolbox.GetTimeSecond(),this.hostname,this.process,os.Getpid(),"fatal",fmt.Sprint(e...),file,line,stack)
 	if err != nil{
 		this.mu.Lock()
 		log.Println("------------------")
@@ -159,7 +159,7 @@ func (this *Sqloger) Fatal(e ...interface{}){
 }
 
 func (this *Sqloger) Msg(label string,msg ...interface{}){
-	_,err:=this.stmt.Exec(time.Now().Format("2006-01-02 15:04:05"),this.hostname,this.process,os.Getpid(),label,fmt.Sprint(msg...),nil,nil,nil)
+	_,err:=this.stmt.Exec(toolbox.GetTimeSecond(),this.hostname,this.process,os.Getpid(),label,fmt.Sprint(msg...),nil,nil,nil)
 	if err != nil{
 		this.mu.Lock()
 		log.Println("------------------")
